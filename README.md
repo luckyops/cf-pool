@@ -18,10 +18,11 @@
 
 ## 国家配额
 
-资格赛为 US/CA/AU 保留下载名额（`US:10,CA:8,AU:4`），入池保底席位 `US:4,CA:3`（有候选才生效），
+资格赛为 US/CA/AU 保留下载名额（`US:20,CA:10,AU:6`），入池保底席位 `US:8,CA:5`（有候选才生效），
 注册表由每轮落地探测自动维护。实测当前网络出口 CF 落地分布：LAX×1126 段 / FRA×907 / AMS×318 /
 SIN×97 / SJC×13 / NRT×8，**CA 落地段为 0**（境内出境路由不经过 CF 加拿大机房，属路由物理现实；
-配额机制已就绪，路由变化会自动接入）。
+配额机制已就绪，路由变化会自动接入）。**加拿大的现实替代**：`proxy_ca.txt` 提供经功能验证、
+物理位于加拿大的社区反代地址（流量从加拿大出境），每日随源刷新自动更新。
 
 ## TLS 下载资格赛
 
@@ -43,10 +44,11 @@ Discovery 通过功能验证的 /24 需**连续 2 天成功**才自动晋升进 
 
 | 文件 | 用途 | edgetunnel 变量 |
 |---|---|---|
-| `add.txt` | TLS 池（IP:443，速度+延迟排序） | `ADDAPI` |
-| `notls.txt` | 非TLS 池（IP:80，延迟排序） | `ADDNOTLSAPI` |
-| `all.txt` | 两池合并 | 任意 |
+| `add.txt` | TLS 池（IP:443，每池 50 个，速度+延迟排序） | `ADDAPI` |
+| `notls.txt` | 非TLS 池（IP:80，每池 50 个，延迟排序） | `ADDNOTLSAPI` |
+| `all.txt` | 两池合并（100 个） | 任意 |
 | `proxy.txt` | 社区反代 IP 池（非 CF 自有 IP，IPDB 聚合，自愿取用） | `ADD`（自担风险） |
+| `proxy_ca.txt` 等 | 按地理国家细分的反代子池（ca/us/au/jp/sg；ca 池经 SNI 功能验证，流量从加拿大出境） | `ADD`（自担风险） |
 | `stats_report.txt` | /24 滚动统计 Top30（热点分布） | — |
 | `result_*.csv` | 本轮扫描明细（延迟/丢包/速度/落地机房） | — |
 
@@ -55,3 +57,4 @@ Raw 地址：
 - https://raw.githubusercontent.com/luckyops/cf-pool/main/notls.txt
 - https://raw.githubusercontent.com/luckyops/cf-pool/main/all.txt
 - https://raw.githubusercontent.com/luckyops/cf-pool/main/proxy.txt
+- https://raw.githubusercontent.com/luckyops/cf-pool/main/proxy_ca.txt
